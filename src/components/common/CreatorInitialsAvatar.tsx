@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface CreatorInitialsAvatarProps {
@@ -27,9 +28,10 @@ const CreatorInitialsAvatar: React.FC<CreatorInitialsAvatarProps> = ({
 	className,
 	imageClassName,
 }) => {
+	const [hasError, setHasError] = useState(false);
 	const initials = getInitials(name);
 
-	if (!imageSrc) {
+	if (!imageSrc || hasError) {
 		return (
 			<div
 				className={cn(
@@ -46,6 +48,7 @@ const CreatorInitialsAvatar: React.FC<CreatorInitialsAvatarProps> = ({
 		<img
 			src={imageSrc}
 			alt={name}
+			onError={() => setHasError(true)}
 			className={cn('size-full object-cover', imageClassName, className)}
 		/>
 	);
