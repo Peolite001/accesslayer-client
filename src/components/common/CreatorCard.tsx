@@ -15,6 +15,7 @@ import CreatorSocialLinksList from '@/components/common/CreatorSocialLinksList';
 import TransactionStatusIcon from '@/components/common/TransactionStatusIcon';
 import MiniStatChip from '@/components/common/MiniStatChip';
 import CreatorListRowDivider from '@/components/common/CreatorListRowDivider';
+import BuyActionHelperText from '@/components/common/BuyActionHelperText';
 
 interface CreatorCardProps {
 	creator: Course;
@@ -170,6 +171,11 @@ const CreatorCard: React.FC<CreatorCardProps> = ({ creator, className }) => {
 								: 'Buy Key'}
 				</Button>
 			</div>
+
+			<BuyActionHelperText
+				state={transactionState}
+				className="mt-4"
+			/>
 
 			{!isConnected && <WalletConnectCalloutBanner className="mt-4" />}
 

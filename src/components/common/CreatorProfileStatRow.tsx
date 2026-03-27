@@ -1,25 +1,27 @@
-import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import CreatorProfileStatItem from './CreatorProfileStatItem';
+import type { ReactNode } from 'react';
 
-interface CreatorProfileInfoItem {
+interface CreatorProfileStatItemData {
 	label: string;
 	value: ReactNode;
 }
 
-interface CreatorProfileInfoGridProps {
-	items: CreatorProfileInfoItem[];
+interface CreatorProfileStatRowProps {
+	items: CreatorProfileStatItemData[];
 	className?: string;
+	itemClassName?: string;
 }
 
-const CreatorProfileInfoGrid: React.FC<CreatorProfileInfoGridProps> = ({
+const CreatorProfileStatRow: React.FC<CreatorProfileStatRowProps> = ({
 	items,
 	className,
+	itemClassName,
 }) => {
 	return (
 		<div
 			className={cn(
-				'grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4',
+				'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4',
 				className
 			)}
 		>
@@ -28,10 +30,11 @@ const CreatorProfileInfoGrid: React.FC<CreatorProfileInfoGridProps> = ({
 					key={item.label}
 					label={item.label}
 					value={item.value}
+					className={itemClassName}
 				/>
 			))}
 		</div>
 	);
 };
 
-export default CreatorProfileInfoGrid;
+export default CreatorProfileStatRow;

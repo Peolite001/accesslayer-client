@@ -182,6 +182,8 @@ function LandingPage() {
 					title="Find creators without losing your place"
 					description="Search by creator name or handle while you keep scrolling through the marketplace. The filter shell stays visible and compact so you can refine results without losing your place."
 					resultCount={filteredCreators.length}
+					onReset={handleResetSearch}
+					showReset={searchQuery.length > 0}
 				>
 					<SearchBar
 						value={searchQuery}
