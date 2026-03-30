@@ -14,6 +14,8 @@ import WalletConnectCalloutBanner from '@/components/common/WalletConnectCallout
 import CreatorSocialLinksList from '@/components/common/CreatorSocialLinksList';
 import TransactionStatusIcon from '@/components/common/TransactionStatusIcon';
 import MiniStatChip from '@/components/common/MiniStatChip';
+import Change24hBadge from '@/components/common/Change24hBadge';
+import KeySupplyBadge from '@/components/common/KeySupplyBadge';
 import CreatorListRowDivider from '@/components/common/CreatorListRowDivider';
 import BuyActionHelperText from '@/components/common/BuyActionHelperText';
 import CreatorLabeledStatRow from '@/components/common/CreatorLabeledStatRow';
@@ -94,7 +96,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({ creator, className }) => {
 			</div>
 
 			<div className="mb-4">
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-2 flex-wrap">
 					<h3 className="font-jakarta text-lg font-bold text-white">
 						{creator.title}
 					</h3>
@@ -102,6 +104,8 @@ const CreatorCard: React.FC<CreatorCardProps> = ({ creator, className }) => {
 						verified={Boolean(creator.isVerified)}
 						reserveSpace={true}
 					/>
+					<Change24hBadge change={creator.change24h} />
+					<KeySupplyBadge supply={creator.creatorShareSupply} />
 				</div>
 				<p className="font-jakarta text-sm text-white/50">
 					@{creator.instructorId || 'creator'}
