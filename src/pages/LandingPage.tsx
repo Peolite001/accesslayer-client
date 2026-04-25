@@ -21,6 +21,8 @@ import TransactionRetryNotice from '@/components/common/TransactionRetryNotice';
 import EmptyTransactionTimelineState from '@/components/common/EmptyTransactionTimelineState';
 import TradeDialog, { type TradeSide } from '@/components/common/TradeDialog';
 import PendingTxModal from '@/components/common/PendingTxModal';
+import NetworkMismatchBanner from '@/components/common/NetworkMismatchBanner';
+import { useNetworkMismatch } from '@/hooks/useNetworkMismatch';
 import showToast from '@/utils/toast.util';
 import { formatCompactNumber, formatNumber } from '@/utils/numberFormat.utils';
 
@@ -124,6 +126,7 @@ type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'supply-desc';
 
 function LandingPage() {
 	const [creators, setCreators] = useState<Course[]>([]);
+	const { isMismatch: isNetworkMismatch } = useNetworkMismatch();
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [activeProfileTab, setActiveProfileTab] = useState('overview');
@@ -530,14 +533,22 @@ function LandingPage() {
 							label="Creator Share Supply"
 							value={`${formatCompactNumber(250)} shares available`}
 						/>
+						{isNetworkMismatch && (
+							<NetworkMismatchBanner />
+						)}
 						<div className="hidden md:flex items-center gap-3">
-							<Button className="rounded-xl" onClick={() => openTradeDialog('buy')}>
+							<Button
+								className="rounded-xl"
+								onClick={() => openTradeDialog('buy')}
+								disabled={isNetworkMismatch}
+							>
 								Buy
 							</Button>
 							<Button
 								className="rounded-xl"
 								variant="outline"
 								onClick={() => openTradeDialog('sell')}
+								disabled={isNetworkMismatch}
 							>
 								Sell
 							</Button>
@@ -556,7 +567,12 @@ function LandingPage() {
 							</div>
 						</div>
 						<div className="flex items-center gap-2">
-							<Button className="rounded-xl" size="sm" onClick={() => openTradeDialog('buy')}>
+							<Button
+								className="rounded-xl"
+								size="sm"
+								onClick={() => openTradeDialog('buy')}
+								disabled={isNetworkMismatch}
+							>
 								Buy
 							</Button>
 							<Button
@@ -564,6 +580,7 @@ function LandingPage() {
 								size="sm"
 								variant="outline"
 								onClick={() => openTradeDialog('sell')}
+								disabled={isNetworkMismatch}
 							>
 								Sell
 							</Button>
