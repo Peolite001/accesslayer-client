@@ -13,6 +13,7 @@ import CardMetaRow from '@/components/common/CardMetaRow';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import CreatorInitialsAvatar from '@/components/common/CreatorInitialsAvatar';
 import WalletConnectCalloutBanner from '@/components/common/WalletConnectCalloutBanner';
+import NetworkMismatchBanner from '@/components/common/NetworkMismatchBanner';
 import CreatorSocialLinksList from '@/components/common/CreatorSocialLinksList';
 import TransactionStatusIcon from '@/components/common/TransactionStatusIcon';
 import MiniStatChip from '@/components/common/MiniStatChip';
@@ -22,6 +23,7 @@ import CreatorListRowDivider from '@/components/common/CreatorListRowDivider';
 import BuyActionHelperText from '@/components/common/BuyActionHelperText';
 import CreatorLabeledStatRow from '@/components/common/CreatorLabeledStatRow';
 import { useTransactionTelemetry } from '@/hooks/useTransactionTelemetry';
+import { useNetworkMismatch } from '@/hooks/useNetworkMismatch';
 import { formatCompactNumber, formatNumber } from '@/utils/numberFormat.utils';
 
 interface CreatorCardProps {
@@ -31,6 +33,7 @@ interface CreatorCardProps {
 
 const CreatorCard: React.FC<CreatorCardProps> = ({ creator, className }) => {
 	const { isConnected } = useAccount();
+	const { isMismatch: isNetworkMismatch, expectedChainName } = useNetworkMismatch();
 	const [transactionState, setTransactionState] = useState<
 		'idle' | 'submitting' | 'failed' | 'success'
 	>('idle');
@@ -86,6 +89,13 @@ const CreatorCard: React.FC<CreatorCardProps> = ({ creator, className }) => {
 	const handleBuy = () => {
 		if (!isConnected) {
 			toast.error('Please connect your wallet to purchase keys', {
+				duration: 4000,
+			});
+			return;
+		}
+
+		if (isNetworkMismatch) {
+			toast.error(`Switch to ${expectedChainName} to purchase keys`, {
 				duration: 4000,
 			});
 			return;
@@ -221,6 +231,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({ creator, className }) => {
 					size="sm"
 					isPending={transactionState === 'submitting'}
 					pendingText="Processing..."
+					disabled={isNetworkMismatch}
 					className={cn(
 						'rounded-xl font-bold',
 						!isConnected && 'border-white/10  hover:bg-white/5'
@@ -241,9 +252,21 @@ const CreatorCard: React.FC<CreatorCardProps> = ({ creator, className }) => {
 				</AsyncButton>
 			</div>
 
-			<BuyActionHelperText state={transactionState} className="mt-4" />
+			<BuyActionHelperText
+				state={transactionState}
+				className="mt-4"
+				disabledReason={
+					isNetworkMismatch
+						? `Switch to ${expectedChainName} to enable purchases.`
+						: undefined
+				}
+			/>
 
 			{!isConnected && <WalletConnectCalloutBanner className="mt-4" />}
+
+			{isConnected && isNetworkMismatch && (
+				<NetworkMismatchBanner className="mt-4" />
+			)}
 
 			{transactionState === 'failed' && (
 				<TransactionRetryNotice
