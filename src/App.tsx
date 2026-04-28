@@ -4,7 +4,7 @@ import LandingPage from './pages/LandingPage';
 import { WalletProvider } from './contexts/WalletProvider';
 import { WalletButton } from './components/wallet/WalletButton';
 import { WalletStatusPill } from './components/wallet/WalletStatusPill';
-
+import { ReadOnlyBanner } from './components/wallet/ReadOnlyBanner';
 const router = createBrowserRouter([
 	{
 		path: '/',
@@ -17,6 +17,8 @@ function App() {
 		
 		<>
 		<WalletProvider>
+
+			        <ReadOnlyBanner />
 
 			<Toaster
 				toastOptions={{
